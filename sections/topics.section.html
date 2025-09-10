@@ -1,0 +1,364 @@
+<!-- =========================================================
+TRANSFORMATIVE LEADERSHIP — Topics Section (Accordion + CTA)
+• Paste this entire block inside a single WordPress "Custom HTML" element.
+• 100% self-contained (scoped to #leadership-topics). No external assets.
+• Clean, premium look that stays true to the dark blue/teal brand shown.
+• Accessible keyboard navigation. Smooth open/close. Subtle motion-on-scroll.
+========================================================= -->
+<section id="leadership-topics"
+  aria-label="Discover Transformative Leadership Topics"
+  data-cta-url="#contact">
+
+  <style>
+    /* =========================
+       BRAND TOKENS (edit only these to match palette)
+       ========================= */
+    #leadership-topics{
+      --bg: #30464f;                /* page background (dark slate/blue) */
+      --surface: #ffffff;           /* card background for accordions */
+      --surface-2: #f4f7f9;         /* subtle alt surface for hover */
+      --text: #e9f1f5;              /* main heading text on dark */
+      --muted: #c4d2d9;             /* supporting copy */
+      --ink: #1f2a30;               /* dark text on light surfaces */
+      --accent: #1dd079;            /* primary brand accent (button/underline) */
+      --accent-2: #12a8b3;          /* secondary accent (teal) */
+      --shadow: 0 10px 30px rgba(7,17,28,.25);
+      --radius-lg: 16px;
+      --radius-xl: 22px;
+      --ring: 0 0 0 4px color-mix(in lab, var(--accent) 24%, transparent);
+      --speed: .45s;
+      --easing: cubic-bezier(.2,.7,.2,1);
+    }
+
+    /* ===== Scope reset (no global leakage) ===== */
+    #leadership-topics, #leadership-topics * { box-sizing: border-box; }
+    #leadership-topics{ font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif; color: var(--text); background: radial-gradient(1200px 600px at 50% -10%, rgba(18,168,179,.25), transparent 60%), var(--bg); position: relative; padding: 72px 16px; overflow: clip; }
+
+    /* Subtle decorative grain */
+    #leadership-topics::before{
+      content:""; position:absolute; inset:-20%;
+      background:
+        radial-gradient(800px 400px at 20% 0%, rgba(29,208,121,.10), transparent 60%),
+        radial-gradient(800px 400px at 80% -10%, rgba(18,168,179,.10), transparent 60%);
+      pointer-events:none; filter: blur(20px);
+    }
+
+    /* ===== Layout ===== */
+    #leadership-topics .lt-wrap{ max-width: 1100px; margin: 0 auto; }
+
+    /* ===== Headline block ===== */
+    #leadership-topics .lt-kicker{
+      margin: 0 auto 10px; display:block; width:max-content; letter-spacing:.06em;
+      font-weight:700; font-size:.9rem; text-transform:uppercase; color: var(--muted);
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      -webkit-background-clip: text; background-clip:text; color:transparent;
+    }
+
+    #leadership-topics h2{
+      margin: 0 auto; text-align:center; font-weight:800; line-height:1.15;
+      font-size: clamp(1.85rem, 3.1vw, 2.6rem);
+      color: var(--text);
+      letter-spacing:.2px;
+      position: relative; width: fit-content;
+    }
+    #leadership-topics h2 .hl{
+      background: linear-gradient(90deg, color-mix(in lab, var(--accent) 70%, #fff 30%), var(--accent-2));
+      background-size: 100% 6px; background-repeat:no-repeat; background-position: 0 100%;
+      padding-bottom: 8px; border-radius: 2px;
+    }
+
+    #leadership-topics .lt-sub{
+      margin: 14px auto 34px; text-align:center; max-width: 760px; color: var(--muted);
+      font-size: clamp(.98rem, 1.4vw, 1.08rem);
+    }
+
+    /* ===== Accordion ===== */
+    #leadership-topics .lt-acc{
+      display:grid; gap:14px; margin: 0 auto 26px; max-width: 1120px;
+    }
+
+    /* use <details> for native a11y; enhance visually */
+    #leadership-topics details.lt-item{
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: clip;
+      transition: transform var(--speed) var(--easing), box-shadow var(--speed) var(--easing), background .25s ease;
+      border: 1px solid rgba(17, 46, 56, .06);
+      will-change: transform, box-shadow;
+    }
+    #leadership-topics details.lt-item:is(:hover, :focus-within){
+      background: var(--surface);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(5,12,20,.28);
+    }
+
+    /* summary (button) */
+    #leadership-topics summary.lt-sum{
+      list-style:none; cursor:pointer; user-select:none;
+      display:grid; grid-template-columns: 1fr auto; align-items:center; gap:14px;
+      padding: 20px 22px;
+      font-size: clamp(1rem, 1.2vw, 1.15rem); font-weight:700; color: var(--ink);
+      position:relative; outline: none;
+    }
+    #leadership-topics summary.lt-sum::-webkit-details-marker{ display:none; }
+    #leadership-topics summary.lt-sum:focus-visible{ box-shadow: var(--ring); border-radius: 12px; }
+    #leadership-topics .lt-title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* chevron */
+    #leadership-topics .lt-chevron{
+      width: 28px; height: 28px; display:inline-grid; place-items:center;
+      border-radius: 10px; border: 1px solid rgba(20,30,40,.12); background: var(--surface-2);
+      transition: transform var(--speed) var(--easing), background .25s ease, border-color .25s ease;
+    }
+    #leadership-topics .lt-chevron svg{ width: 16px; height:16px; transition: transform var(--speed) var(--easing); }
+    #leadership-topics details[open] .lt-chevron{ background: color-mix(in lab, var(--accent) 15%, var(--surface-2)); border-color: color-mix(in lab, var(--accent) 24%, rgba(20,30,40,.18)); }
+    #leadership-topics details[open] .lt-chevron svg{ transform: rotate(180deg); }
+
+    /* panel */
+    #leadership-topics .lt-panel{
+      padding: 0 22px 20px;
+      overflow: hidden;
+      transition: grid-template-rows var(--speed) var(--easing);
+    }
+
+    /* smooth open/close */
+    #leadership-topics .lt-panel-inner{
+      display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--speed) var(--easing);
+    }
+    #leadership-topics details[open] .lt-panel-inner{ grid-template-rows: 1fr; }
+    #leadership-topics .lt-panel-content{
+      min-height: 0; color: #334149; padding-top: 2px;
+      animation: lt-fade var(--speed) var(--easing) both;
+    }
+
+    #leadership-topics .lt-panel p{ margin: 14px 0 12px; }
+    #leadership-topics .lt-panel ul{ margin: 8px 0 2px 18px; color:#3a4b54; }
+    #leadership-topics .lt-panel li{ margin: 6px 0; }
+
+    /* ===== Tagline ===== */
+    #leadership-topics .lt-tagline{
+      text-align:center; color: var(--muted); margin: 24px auto 18px; font-size: 1.05rem;
+    }
+    #leadership-topics .lt-tagline em{
+      color: #fff; font-style: normal; font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip:text; color:transparent;
+      text-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+
+    /* ===== CTA ===== */
+    #leadership-topics .lt-cta{
+      display:flex; justify-content:center;
+    }
+    #leadership-topics .lt-btn{
+      --glow: color-mix(in lab, var(--accent) 70%, white 20%);
+      appearance:none; border:none; cursor:pointer; text-decoration:none;
+      padding: 16px 26px; font-weight:900; font-size: clamp(1rem, 1.4vw, 1.15rem);
+      color:#0b1f14; background:
+        radial-gradient(120% 120% at 50% 120%, rgba(0,0,0,.16), transparent 45%),
+        linear-gradient(180deg, color-mix(in lab, var(--accent) 80%, #fff 10%), color-mix(in lab, var(--accent) 60%, var(--accent-2) 30%));
+      border-radius: 999px; box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.5),
+        0 10px 30px color-mix(in lab, var(--accent) 40%, black 10%);
+      transition: transform .2s ease, box-shadow .25s ease, filter .25s ease;
+      position:relative; outline: none; letter-spacing:.2px;
+    }
+    #leadership-topics .lt-btn::after{
+      content:""; position:absolute; inset:-8px; border-radius: inherit;
+      box-shadow: 0 0 0 0 var(--glow);
+      opacity:.0; transition: opacity .35s ease, box-shadow .35s ease;
+    }
+    #leadership-topics .lt-btn:hover{ transform: translateY(-1px); box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.6),
+      0 16px 34px color-mix(in lab, var(--accent) 46%, black 16%); }
+    #leadership-topics .lt-btn:hover::after{ opacity:.9; box-shadow: 0 0 24px 6px color-mix(in lab, var(--accent) 60%, white 10%); }
+    #leadership-topics .lt-btn:focus-visible{ box-shadow: var(--ring), 0 10px 30px color-mix(in lab, var(--accent) 40%, black 10%); }
+
+    /* ===== In-view entrance ===== */
+    #leadership-topics .reveal{ opacity:0; transform: translateY(14px); transition: transform .6s var(--easing), opacity .6s var(--easing); }
+    #leadership-topics .reveal.in{ opacity:1; transform: none; }
+
+    /* ===== Reduced motion ===== */
+    @media (prefers-reduced-motion: reduce){
+      #leadership-topics .reveal, #leadership-topics .lt-btn, #leadership-topics .lt-panel-inner{ transition: none !important; }
+      #leadership-topics .lt-btn:hover{ transform: none; }
+    }
+
+    /* ===== Keyframes ===== */
+    @keyframes lt-fade{ from{opacity:.0} to{opacity:1} }
+  </style>
+
+  <div class="lt-wrap">
+    <span class="lt-kicker reveal">Unlock Executive Growth Strategies</span>
+    <h2 class="reveal"><span class="hl">Discover Transformative Leadership Topics</span></h2>
+    <p class="lt-sub reveal">Curated, experience-tested sessions that energize your leaders, align your culture, and turn insight into action.</p>
+
+    <!-- Accordion -->
+    <div class="lt-acc">
+      <!-- ITEM 1 -->
+      <details class="lt-item reveal" data-key="genius-caveman-robot">
+        <summary class="lt-sum" role="button">
+          <span class="lt-title">The Genius, the Caveman, and the Robot</span>
+          <span class="lt-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0b1720" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </summary>
+        <div class="lt-panel" role="region" aria-label="The Genius, the Caveman, and the Robot details">
+          <div class="lt-panel-inner">
+            <div class="lt-panel-content">
+              <p>Decode how instinct, intellect, and automation shape modern decisions. Leaders learn when to trust gut, when to model, and when to hand off to systems.</p>
+              <ul>
+                <li>Map fast vs. slow thinking to your org’s real choices.</li>
+                <li>Design “robot-ready” processes without losing humanity.</li>
+                <li>Frameworks to defuse bias under pressure.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- ITEM 2 -->
+      <details class="lt-item reveal" data-key="not-dads-company">
+        <summary class="lt-sum" role="button">
+          <span class="lt-title">This Isn’t Your Dad’s Company Anymore</span>
+          <span class="lt-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0b1720" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </summary>
+        <div class="lt-panel" role="region" aria-label="This Isn’t Your Dad’s Company Anymore details">
+          <div class="lt-panel-inner">
+            <div class="lt-panel-content">
+              <p>From hybrid work to AI-everywhere, expectations have changed. Equip managers with the skills to lead autonomy, outcomes, and inclusive speed.</p>
+              <ul>
+                <li>Modern norms: clarity, psychological safety, and velocity.</li>
+                <li>Outcome-based performance without micromanagement.</li>
+                <li>Playbook: meetings that earn their spot on the calendar.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- ITEM 3 -->
+      <details class="lt-item reveal" data-key="timeless-excellence">
+        <summary class="lt-sum" role="button">
+          <span class="lt-title">The Timeless Path to Leadership Excellence</span>
+          <span class="lt-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0b1720" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </summary>
+        <div class="lt-panel" role="region" aria-label="The Timeless Path to Leadership Excellence details">
+          <div class="lt-panel-inner">
+            <div class="lt-panel-content">
+              <p>Principles that never expire—character, clarity, and compounding habits—translated into today’s operating reality.</p>
+              <ul>
+                <li>Five daily practices that scale trust and influence.</li>
+                <li>Turning values into visible operating standards.</li>
+                <li>Coaching loops that sustain growth between offsites.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- ITEM 4 -->
+      <details class="lt-item reveal" data-key="high-performance">
+        <summary class="lt-sum" role="button">
+          <span class="lt-title">High-Performance Solutions</span>
+          <span class="lt-chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0b1720" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </summary>
+        <div class="lt-panel" role="region" aria-label="High-Performance Solutions details">
+          <div class="lt-panel-inner">
+            <div class="lt-panel-content">
+              <p>Build a system where teams deliver flow, focus, and fearless execution—without burnout.</p>
+              <ul>
+                <li>Design a cadence of accountability that people love.</li>
+                <li>Prioritization that kills noise and amplifies ROI.</li>
+                <li>Metrics that change behavior (not just dashboards).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <p class="lt-tagline reveal">Make <em>leadership development</em> the highlight of your event.</p>
+
+    <div class="lt-cta reveal">
+      <a class="lt-btn" href="#contact" id="lt-cta-btn" aria-label="Plan your event">PLAN YOUR EVENT</a>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const root = document.getElementById('leadership-topics');
+
+      /* ===== Deep-link / Memory & single-open behavior ===== */
+      const items = Array.from(root.querySelectorAll('details.lt-item'));
+      const memKey = 'lt-open-topic';
+      const hashKey = () => (location.hash || '').replace('#','');
+
+      // Allow only one open at a time
+      items.forEach(d => {
+        d.addEventListener('toggle', () => {
+          if (d.open){
+            items.forEach(o => (o!==d) && (o.open=false));
+            // remember
+            try{ sessionStorage.setItem(memKey, d.dataset.key || ''); }catch(e){}
+            // update hash non-destructively
+            if (d.dataset.key){ history.replaceState(null, '', '#'+d.dataset.key); }
+          }
+        }, {passive:true});
+      });
+
+      // Restore from hash or memory
+      const openFromKey = (k)=>{
+        const target = items.find(d => (d.dataset.key||'') === k);
+        if (target){ target.open = true; target.scrollIntoView({block:'nearest', behavior:'smooth'}); }
+      };
+      const existing = hashKey() || (sessionStorage.getItem(memKey)||'');
+      if (existing) openFromKey(existing);
+
+      // Observe hash changes
+      window.addEventListener('hashchange', () => {
+        const k = hashKey();
+        if (k) openFromKey(k);
+      });
+
+      /* ===== In-view entrance animation ===== */
+      const revealEls = root.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(ent=>{
+          if(ent.isIntersecting){
+            ent.target.classList.add('in');
+            io.unobserve(ent.target);
+          }
+        });
+      }, {rootMargin:'0px 0px -10% 0px', threshold: .1});
+      revealEls.forEach(el=>io.observe(el));
+
+      /* ===== CTA link from data attribute (optional) ===== */
+      const cta = root.querySelector('#lt-cta-btn');
+      const url = root.getAttribute('data-cta-url');
+      if (cta && url){ cta.setAttribute('href', url); }
+
+      /* ===== Keyboard niceties for summary element ===== */
+      root.querySelectorAll('summary.lt-sum').forEach(sum=>{
+        sum.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            sum.click();
+          }
+          // Arrow navigation between summaries
+          const all = Array.from(root.querySelectorAll('summary.lt-sum'));
+          const i = all.indexOf(sum);
+          if (e.key === 'ArrowDown'){ e.preventDefault(); (all[i+1] || all[0]).focus(); }
+          if (e.key === 'ArrowUp'){ e.preventDefault(); (all[i-1] || all[all.length-1]).focus(); }
+        });
+      });
+    })();
+  </script>
+</section>
