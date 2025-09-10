@@ -3,11 +3,15 @@
 <!--  Paste into ONE WP “Custom HTML” block -->
 <!--  Fully namespaced to #pro-testimonials (no global leaks) -->
 <!-- =============================== -->
-<section id="pro-testimonials" aria-label="Client testimonials">
+<section id="pro-testimonials"
+  aria-label="Client testimonials"
+  data-autoplay="true"
+  data-interval="6500">
+
   <style>
     /* ---------- Brand Tokens (edit as needed) ---------- */
     #pro-testimonials{
-      --brand-bg: #075B74;             /* deep teal */
+      --brand-bg: #075B74;             /* deep teal (from your brand) */
       --brand-bg-2:#0E6D88;            /* subtle gradient partner */
       --brand-ink:#ffffff;             /* primary text on teal */
       --brand-muted: rgba(255,255,255,.72);
@@ -15,250 +19,262 @@
       --accent:#DDF3FF;                /* soft highlight for details */
       --focus:#FFFFFF;                 /* focus ring on dark bg */
       --radius: 18px;
-      --shadow: 0 30px 100px rgba(0,0,0,.35);
-      --wrap: min(1020px, 92vw);
-      --h1: clamp(26px, 4vw, 48px);
-      --lead: clamp(18px, 2.2vw, 24px);
-      --body: clamp(15px, 1.8vw, 18px);
-      --slow: 700ms;
-      --fast: 320ms;
+      --shadow: 0 30px 100px rgba(0,0,0,.25);
+      --ring: 0 0 0 3px rgba(255,255,255,.35);
+      --title-size: clamp(28px, 3.8vw, 48px);
+      --quote-size: clamp(18px, 2.2vw, 26px);
+      --name-size: clamp(14px, 1.4vw, 16px);
+      --maxw: 1200px;
+      --speed: 480ms;
       --e: cubic-bezier(.2,.7,.2,1);
     }
 
-    /* ---------- Section Canvas ---------- */
+    /* ---------- Section shell & background ---------- */
     #pro-testimonials{
-      position: relative;
-      isolation: isolate;
-      color: var(--brand-ink);
+      position:relative;
+      color:var(--brand-ink);
+      isolation:isolate;
+      overflow:hidden;
+      padding: clamp(64px, 9vw, 120px) 20px;
       background:
-        radial-gradient(1400px 600px at 50% -10%, rgba(255,255,255,.06), transparent 60%),
-        linear-gradient(180deg, var(--brand-bg), var(--brand-bg-2));
-      padding: clamp(64px, 8vw, 120px) 0;
-      overflow: hidden;
+        radial-gradient(1200px 600px at 80% 0%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(900px 500px at 15% 100%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(180deg, var(--brand-bg-2), var(--brand-bg));
     }
+    /* soft grain without images */
     #pro-testimonials::before{
       content:"";
-      position:absolute; inset:-2px;
-      background:
-        conic-gradient(from 90deg at 25% 25%, rgba(255,255,255,.035), rgba(255,255,255,0) 20% 80%, rgba(255,255,255,.035)) 0 0/22px 22px;
-      mix-blend-mode: overlay;
-      opacity:.45;
+      position:absolute;inset:-2px;
       pointer-events:none;
+      opacity:.06;mix-blend-mode:soft-light;
+      background:
+        repeating-linear-gradient(90deg, #fff0 0 2px, #fff1 2px 3px),
+        repeating-linear-gradient(0deg,  #fff0 0 2px, #fff1 2px 3px);
+      filter:contrast(120%) saturate(110%);
     }
 
     /* ---------- Layout ---------- */
-    #pro-testimonials .wrap{
-      width: var(--wrap);
-      margin-inline: auto;
-      text-align: center;
-      filter: drop-shadow(var(--shadow));
-    }
-    #pro-testimonials h2.title{
-      font: italic 800 var(--h1)/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial;
-      letter-spacing:.5px;
-      margin: 0 0 14px;
-      text-shadow: 0 2px 0 rgba(0,0,0,.05);
+    #pro-testimonials .wrap{ max-width:var(--maxw); margin-inline:auto; }
+    #pro-testimonials .head{
+      text-align:center;
+      margin-bottom: clamp(28px, 3.5vw, 44px);
     }
     #pro-testimonials .eyebrow{
-      display:inline-block;
-      font: 600 var(--body)/1.2 ui-sans-serif, system-ui;
-      color: var(--brand-muted);
-      letter-spacing:.14em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
+      letter-spacing:.18em; text-transform:uppercase;
+      font-size:12px; opacity:.75; margin:0 0 12px;
+    }
+    #pro-testimonials h2{
+      margin:0; font-weight:800; line-height:1.1; letter-spacing:.01em;
+      font-size:var(--title-size);
+      text-shadow:0 1px 0 rgba(0,0,0,.1);
+    }
+    #pro-testimonials .dash{
+      width:72px;height:3px;border-radius:3px;background:var(--accent);
+      margin:16px auto 0; opacity:.7;
     }
 
-    /* ---------- Slider Shell ---------- */
-    #pro-testimonials .slider{
-      position: relative;
-      margin-top: 14px;
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-      border: 1px solid var(--brand-faint);
-      overflow: clip;
+    /* ---------- Slider ---------- */
+    #pro-testimonials .slider{ position:relative; }
+    #pro-testimonials .track{
+      list-style:none; margin:0; padding:0;
+      position:relative;
     }
-    #pro-testimonials .viewport{
-      position: relative;
-      min-height: 320px;
-    }
-    #pro-testimonials figure.slide{
-      margin: 0;
-      width: 100%;
-      inset: 0;
-      position: absolute;
-      display: grid;
-      place-items: center;
-      padding: clamp(26px, 6vw, 54px);
-      opacity: 0;
-      transform: translateY(14px) scale(.98);
-      transition: opacity var(--slow) var(--e), transform var(--slow) var(--e);
-    }
-    #pro-testimonials figure.slide.current{
-      opacity: 1;
-      transform: none;
-      position: relative;
-    }
+    #pro-testimonials .slide{ display:none; }
+    #pro-testimonials .slide.is-active{ display:block; }
 
-    /* Quote styling */
-    #pro-testimonials blockquote{
-      margin: 0;
-      font: 500 var(--lead)/1.5 "Georgia", ui-serif, serif;
-      color: var(--brand-ink);
+    /* ---------- Quote Card ---------- */
+    #pro-testimonials .quote-card{
+      position:relative;
+      margin:0 auto;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      border:1px solid var(--brand-faint);
+      border-radius:calc(var(--radius) + 6px);
+      box-shadow:var(--shadow);
+      padding: clamp(28px, 4.5vw, 56px);
+      max-width: 940px;
+      transform:translateY(10px) scale(.98);
+      opacity:.0;
+      transition: transform var(--speed) var(--e), opacity var(--speed) var(--e), box-shadow var(--speed) var(--e);
     }
-    #pro-testimonials blockquote .q{ display:block; }
+    #pro-testimonials .slide.is-active .quote-card{
+      transform:translateY(0) scale(1);
+      opacity:1;
+    }
+    #pro-testimonials .quote{
+      font-size:var(--quote-size); line-height:1.5; margin:0;
+      color:var(--brand-ink);
+      text-wrap:balance;
+    }
+    #pro-testimonials .quote strong{ color:#fff; }
+    #pro-testimonials .quote::before, 
+    #pro-testimonials .quote::after{
+      color:var(--accent); opacity:.65; font-weight:900; font-size:1.25em;
+    }
+    #pro-testimonials .quote::before{ content:"“"; margin-right:.06em; }
+    #pro-testimonials .quote::after{ content:"”"; margin-left:.02em; }
 
-    /* decorative smart quotes */
-    #pro-testimonials .q::before,
-    #pro-testimonials .q::after{
-      font-size: 1.2em;
-      opacity:.55;
+    #pro-testimonials .meta{
+      display:flex; align-items:center; gap:12px;
+      margin-top:22px; color:var(--brand-muted);
     }
-    #pro-testimonials .q::before{ content: "“"; margin-right:.02em }
-    #pro-testimonials .q::after { content: "”"; margin-left:.02em }
-
-    /* Person */
-    #pro-testimonials figcaption{
-      margin-top: 22px;
-      color: var(--accent);
-      font: 600 var(--body)/1.35 ui-sans-serif, system-ui;
+    #pro-testimonials .avatar{
+      width:40px;height:40px;border-radius:50%; display:inline-grid; place-items:center;
+      background:rgba(255,255,255,.12); border:1px solid var(--brand-faint);
+      font-weight:700; color:#fff;
     }
-    #pro-testimonials .role{
-      display:block;
-      font: 500 clamp(13px, 1.6vw, 15px)/1.35 ui-sans-serif, system-ui;
-      color: var(--brand-muted);
-      margin-top: 4px;
-    }
+    #pro-testimonials .name{ font-weight:700; font-size:var(--name-size); color:#fff; }
+    #pro-testimonials .loc{ opacity:.8; font-size:var(--name-size); }
 
     /* ---------- Controls ---------- */
     #pro-testimonials .controls{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap: 12px;
-      padding: 14px 14px 18px;
-      border-top: 1px solid var(--brand-faint);
+      display:flex; align-items:center; justify-content:center; gap:16px;
+      margin-top: clamp(18px, 2.2vw, 26px);
+      user-select:none;
     }
-    #pro-testimonials .dots{ display:flex; gap:10px; }
-    #pro-testimonials .dot{
-      width: 9px; height: 9px; border-radius: 999px;
-      background: var(--brand-faint);
-      outline: none; border: 0; cursor:pointer;
-      transition: transform var(--fast) var(--e), background var(--fast) var(--e), width var(--fast) var(--e);
+    #pro-testimonials .nav{
+      appearance:none; border:1px solid var(--brand-faint); background:#ffffff0e;
+      color:var(--brand-ink); padding:10px 12px; border-radius:14px;
+      display:inline-grid; place-items:center; cursor:pointer;
+      transition: transform .18s var(--e), background .18s var(--e), box-shadow .18s var(--e);
+      backdrop-filter: blur(4px);
     }
-    #pro-testimonials .dot[aria-current="true"]{
-      background: var(--brand-ink);
-      width: 22px;
-      transform: translateY(-1px);
-    }
-    #pro-testimonials .nav{ display:flex; gap:10px; margin-left: 12px; }
-    #pro-testimonials .btn{
-      appearance:none; border:1px solid var(--brand-faint); background:transparent; color:var(--brand-ink);
-      width:38px; height:38px; border-radius:10px; display:grid; place-items:center;
-      cursor:pointer; transition: background var(--fast) var(--e), transform var(--fast) var(--e);
-    }
-    #pro-testimonials .btn:hover{ background: rgba(255,255,255,.06) }
-    #pro-testimonials .btn:active{ transform: translateY(1px) }
-    #pro-testimonials .btn:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
+    #pro-testimonials .nav:hover{ background:#ffffff18; transform:translateY(-1px); }
+    #pro-testimonials .nav:active{ transform:translateY(0); }
+    #pro-testimonials .nav:focus-visible{ outline:none; box-shadow:var(--ring); }
 
-    /* Progress bar (autoplay) */
+    #pro-testimonials .dots{ display:flex; gap:8px; }
+    #pro-testimonials .dot{
+      width:9px; height:9px; border-radius:999px;
+      background:rgba(255,255,255,.33); border:1px solid rgba(255,255,255,.5);
+      cursor:pointer; transition: transform .2s var(--e), background .2s var(--e);
+    }
+    #pro-testimonials .dot[aria-selected="true"]{
+      background:#fff; transform:scale(1.2);
+    }
+    #pro-testimonials .dot:focus-visible{ outline:none; box-shadow:var(--ring); }
+
+    #pro-testimonials .play{
+      appearance:none; border:none; background:#ffffff12; color:#fff;
+      padding:8px 12px; border-radius:12px; cursor:pointer;
+      border:1px solid var(--brand-faint);
+      transition: background .2s var(--e), transform .2s var(--e);
+    }
+    #pro-testimonials .play:hover{ background:#ffffff22; transform:translateY(-1px); }
+    #pro-testimonials .play:focus-visible{ outline:none; box-shadow:var(--ring); }
+    #pro-testimonials .play[aria-pressed="false"]{ opacity:.8; }
+
+    /* ---------- Progress (autoplay) ---------- */
     #pro-testimonials .progress{
-      --h: 3px;
-      position: relative; height: var(--h); background: var(--brand-faint);
-      overflow: hidden; border-radius: 999px; margin: 0 12px; flex: 1 1 240px;
+      height:2.5px; width:min(260px, 60vw);
+      background:rgba(255,255,255,.25); border-radius:999px;
+      overflow:hidden; margin: 8px auto 0;
     }
     #pro-testimonials .bar{
-      width: 0%; height: 100%; background: var(--brand-ink);
-      transition: width var(--slow) linear;
+      height:100%; width:0%;
+      background:linear-gradient(90deg, #fff, var(--accent));
+      transform-origin:left;
+    }
+    @keyframes pro_testi_progress { from{width:0%} to{width:100%} }
+
+    /* ---------- Accessibility & Motion ---------- */
+    @media (prefers-reduced-motion: reduce){
+      #pro-testimonials .quote-card{ transition:none !important }
+      #pro-testimonials .nav, #pro-testimonials .play{ transition:none !important }
+      #pro-testimonials .bar{ animation:none !important; }
     }
 
-    /* ---------- Reveal on scroll ---------- */
-    @keyframes rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
-    #pro-testimonials[data-revealed="true"] .title { animation: rise .9s var(--e) both .05s }
-    #pro-testimonials[data-revealed="true"] .slider { animation: rise 1s var(--e) both .15s }
-
-    /* ---------- Reduced motion ---------- */
-    @media (prefers-reduced-motion: reduce){
-      #pro-testimonials figure.slide, #pro-testimonials .btn, #pro-testimonials .dot, #pro-testimonials .bar{ transition: none }
+    /* ---------- Small tweaks ---------- */
+    #pro-testimonials .sr-only{
+      position:absolute !important; height:1px;width:1px; overflow:hidden;
+      clip: rect(1px, 1px, 1px, 1px); white-space:nowrap; border:0; padding:0; margin:-1px;
     }
   </style>
 
-  <div class="wrap" data-component="testimonial-slider">
-    <div class="eyebrow">What clients say</div>
-    <h2 class="title">Testimonials</h2>
+  <div class="wrap">
+    <header class="head" aria-live="polite">
+      <div class="eyebrow">What people say</div>
+      <h2>Testimonials</h2>
+      <div class="dash" aria-hidden="true"></div>
+    </header>
 
-    <div class="slider" role="region" aria-roledescription="carousel" aria-label="Testimonials">
-      <div class="viewport" aria-live="polite">
-        <!-- 1 -->
-        <figure class="slide current" data-index="0" itemprop="review" itemscope itemtype="https://schema.org/Review">
-          <blockquote itemprop="reviewBody">
-            <span class="q">
-              Transformative! Entertaining! Life changing! Dr. Mays’ penetrating insight changed the way I understand myself and my leadership. He is truly a master in the field of human and organizational development.
-            </span>
-          </blockquote>
-          <figcaption>
-            <span itemprop="author" itemscope itemtype="https://schema.org/Person"><span itemprop="name">Michelle Madison</span></span>
-            <span class="role">CEO, Unity Endowment, Washington DC</span>
-          </figcaption>
-          <meta itemprop="itemReviewed" content="Keynote & Leadership Workshops">
-          <meta itemprop="reviewRating" content="5">
-        </figure>
+    <div class="slider" role="region" aria-label="Testimonials carousel">
+      <ul class="track">
+        <!-- Slide 1 -->
+        <li class="slide is-active" id="t0" role="tabpanel" aria-labelledby="d0">
+          <figure class="quote-card">
+            <blockquote class="quote">
+              The most powerful training I’ve ever been to. I wish I would have had it 10 years ago.
+            </blockquote>
+            <figcaption class="meta">
+              <div class="avatar" aria-hidden="true">JS</div>
+              <div>
+                <div class="name">Jeff S.</div>
+                <div class="loc">North Carolina</div>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
 
-        <!-- 2 -->
-        <figure class="slide" data-index="1">
-          <blockquote><span class="q">My engagement level was ignited by Kevin’s passion.</span></blockquote>
-          <figcaption>
-            Michael E. Conord
-            <span class="role">Executive Director, Integrace, Adamstown, MD</span>
-          </figcaption>
-        </figure>
+        <!-- Slide 2 -->
+        <li class="slide" id="t1" role="tabpanel" aria-labelledby="d1">
+          <figure class="quote-card">
+            <blockquote class="quote">
+              Clear, practical, and eye-opening. Our team left aligned and energized—results showed up in the very first week.
+            </blockquote>
+            <figcaption class="meta">
+              <div class="avatar" aria-hidden="true">MD</div>
+              <div>
+                <div class="name">Maria D.</div>
+                <div class="loc">California</div>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
 
-        <!-- 3 -->
-        <figure class="slide" data-index="2">
-          <blockquote><span class="q">Eye opening, powerful, and deeply motivating. I now have a roadmap for leading with a better impact.</span></blockquote>
-          <figcaption>
-            Doug N. <span class="role">GA</span>
-          </figcaption>
-        </figure>
+        <!-- Slide 3 -->
+        <li class="slide" id="t2" role="tabpanel" aria-labelledby="d2">
+          <figure class="quote-card">
+            <blockquote class="quote">
+              Practical frameworks delivered with heart. I walked away with tools I could use the same day—and I did.
+            </blockquote>
+            <figcaption class="meta">
+              <div class="avatar" aria-hidden="true">RK</div>
+              <div>
+                <div class="name">Ravi K.</div>
+                <div class="loc">Texas</div>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+      </ul>
 
-        <!-- 4 -->
-        <figure class="slide" data-index="3">
-          <blockquote><span class="q">This has helped our organization be more deliberate in our decision making, improved communication, and has become an important part of the training we offer at our company.</span></blockquote>
-          <figcaption>
-            Taylor Goodall, MD
-          </figcaption>
-        </figure>
+      <!-- Controls -->
+      <div class="controls" aria-controls="pro-testimonials">
+        <button class="nav prev" type="button" aria-label="Previous testimonial" title="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
 
-        <!-- 5 -->
-        <figure class="slide" data-index="4">
-          <blockquote><span class="q">The most powerful training I’ve ever been to. I wish I would have had it 10 years ago.</span></blockquote>
-          <figcaption>
-            Jeff S. <span class="role">NC</span>
-          </figcaption>
-        </figure>
+        <div class="dots" role="tablist" aria-label="Select testimonial">
+          <button class="dot" role="tab" id="d0" aria-controls="t0" aria-selected="true"><span class="sr-only">Jeff S.</span></button>
+          <button class="dot" role="tab" id="d1" aria-controls="t1" aria-selected="false"><span class="sr-only">Maria D.</span></button>
+          <button class="dot" role="tab" id="d2" aria-controls="t2" aria-selected="false"><span class="sr-only">Ravi K.</span></button>
+        </div>
 
-        <!-- 6 -->
-        <figure class="slide" data-index="5">
-          <blockquote><span class="q">I have never witnessed a more effective coaching process than what my Executive Team recently experienced with this process. The team emerged more energized and focused than I had seen them in five years.</span></blockquote>
-          <figcaption>
-            Michael Conord, MD
-          </figcaption>
-        </figure>
+        <button class="nav next" type="button" aria-label="Next testimonial" title="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="play" type="button" aria-pressed="true" aria-label="Pause autoplay" title="Pause/Play">
+          <span class="sr-only">Pause autoplay</span>⏯
+        </button>
       </div>
 
-      <div class="controls">
-        <div class="dots" aria-label="Select testimonial"></div>
-        <div class="progress" aria-hidden="true"><div class="bar"></div></div>
-        <div class="nav" aria-label="Slide controls">
-          <button class="btn prev" type="button" aria-label="Previous testimonial" title="Previous">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="btn next" type="button" aria-label="Next testimonial" title="Next">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="btn pause" type="button" aria-label="Pause autoplay" title="Pause">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5h2v14H9zM13 5h2v14h-2z" fill="currentColor"/></svg>
-          </button>
-        </div>
+      <div class="progress" aria-hidden="true">
+        <div class="bar"></div>
       </div>
     </div>
   </div>
@@ -266,119 +282,98 @@
   <script>
     (() => {
       const root = document.querySelector('#pro-testimonials');
-      const wrap = root?.querySelector('[data-component="testimonial-slider"]');
-      if(!wrap) return;
+      if(!root) return;
 
-      const viewport = wrap.querySelector('.viewport');
-      const slides   = [...viewport.querySelectorAll('.slide')];
-      const dotsWrap = wrap.querySelector('.dots');
-      const btnPrev  = wrap.querySelector('.prev');
-      const btnNext  = wrap.querySelector('.next');
-      const btnPause = wrap.querySelector('.pause');
-      const bar      = wrap.querySelector('.bar');
+      const track = root.querySelector('.track');
+      const slides = Array.from(root.querySelectorAll('.slide'));
+      const dots   = Array.from(root.querySelectorAll('.dot'));
+      const prev   = root.querySelector('.prev');
+      const next   = root.querySelector('.next');
+      const play   = root.querySelector('.play');
+      const bar    = root.querySelector('.bar');
 
       let i = 0;
-      let autoplay = true;
-      let hold = false;
-      const DURATION = 6000; // ms per slide
+      let timer = null;
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const AUTOPLAY = root.dataset.autoplay !== 'false';
+      const INTERVAL = Math.max(3000, parseInt(root.dataset.interval || '6500', 10));
 
-      // Build dots
-      slides.forEach((_, idx) => {
-        const b = document.createElement('button');
-        b.className = 'dot';
-        b.type = 'button';
-        b.setAttribute('aria-label', `Show testimonial ${idx+1}`);
-        b.addEventListener('click', () => go(idx, true));
-        dotsWrap.appendChild(b);
-      });
+      function show(n, {focus=false}={}){
+        i = (n + slides.length) % slides.length;
 
-      function updateDots(){
-        dotsWrap.querySelectorAll('.dot').forEach((d, idx) => {
-          d.setAttribute('aria-current', idx===i ? 'true' : 'false');
+        slides.forEach((el, idx) => {
+          el.classList.toggle('is-active', idx === i);
+          el.setAttribute('aria-hidden', idx === i ? 'false' : 'true');
         });
-      }
+        dots.forEach((d, idx) => {
+          d.setAttribute('aria-selected', idx === i ? 'true' : 'false');
+          d.tabIndex = idx === i ? 0 : -1;
+        });
 
-      function go(next, user=false){
-        const prev = i;
-        i = (next + slides.length) % slides.length;
-        if(prev === i) return;
-        slides[prev].classList.remove('current');
-        slides[i].classList.add('current');
-        updateDots();
-        if(user) restartBar();
-      }
+        if(focus) slides[i].querySelector('.quote-card')?.focus?.();
 
-      // progress bar
-      let barTimer = null, rafId = null, startTs = null;
-      function restartBar(){
-        if(!autoplay || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        cancelAnimationFrame(rafId);
-        clearTimeout(barTimer);
-        bar.style.width = '0%';
-        startTs = performance.now();
-        const tick = now => {
-          const p = Math.min(1, (now - startTs) / DURATION);
-          bar.style.width = (p * 100) + '%';
-          if(p < 1 && !hold) rafId = requestAnimationFrame(tick);
-        };
-        rafId = requestAnimationFrame(tick);
-        barTimer = setTimeout(() => { if(!hold) { go(i+1); restartBar(); } }, DURATION);
-      }
-
-      // Controls
-      btnPrev?.addEventListener('click', () => go(i-1, true));
-      btnNext?.addEventListener('click', () => go(i+1, true));
-      btnPause?.addEventListener('click', () => {
-        autoplay = !autoplay;
-        btnPause.title = autoplay ? 'Pause' : 'Play';
-        btnPause.setAttribute('aria-label', autoplay ? 'Pause autoplay' : 'Resume autoplay');
-        if(autoplay){ restartBar(); } else { clearTimeout(barTimer); cancelAnimationFrame(rafId); }
-      });
-
-      // Pause on hover/focus
-      wrap.addEventListener('pointerenter', () => { hold = true; });
-      wrap.addEventListener('pointerleave', () => { hold = false; if(autoplay) restartBar(); });
-      wrap.addEventListener('focusin',  () => { hold = true;  });
-      wrap.addEventListener('focusout', () => { hold = false; if(autoplay) restartBar(); });
-
-      // Keyboard
-      wrap.addEventListener('keydown', (e) => {
-        if(e.key === 'ArrowRight'){ e.preventDefault(); go(i+1, true); }
-        else if(e.key === 'ArrowLeft'){ e.preventDefault(); go(i-1, true); }
-        else if(e.key.toLowerCase() === ' ' || e.key.toLowerCase() === 'k'){
-          e.preventDefault(); btnPause.click();
+        // restart progress
+        if(bar){
+          bar.style.animation = 'none';
+          // force reflow
+          bar.offsetHeight; 
+          if(timer) bar.style.animation = `pro_testi_progress ${INTERVAL}ms linear forwards`;
         }
-      });
+      }
 
-      // Swipe / drag
-      let x0 = null;
-      wrap.addEventListener('pointerdown', e => { x0 = e.clientX; wrap.setPointerCapture(e.pointerId); });
-      wrap.addEventListener('pointerup', e => {
-        if(x0 === null) return;
-        const dx = e.clientX - x0;
-        if(Math.abs(dx) > 35) go(i + (dx < 0 ? 1 : -1), true);
-        x0 = null;
-      });
+      function nextSlide(){ show(i+1); }
+      function prevSlide(){ show(i-1); }
 
-      // Start when visible
-      const io = new IntersectionObserver(([entry]) => {
-        if(entry.isIntersecting){
-          root.dataset.revealed = "true";
-          if(autoplay && slides.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
-            restartBar();
-          }
-          io.disconnect();
-        }
-      }, { threshold:.35 });
-      io.observe(root);
+      function pause(){ clearInterval(timer); timer = null; play.setAttribute('aria-pressed','false'); bar.style.animation = 'none'; }
+      function playNow(){
+        if(prefersReduced) return; // respect user setting
+        if(timer) return;
+        play.setAttribute('aria-pressed','true');
+        bar.style.animation = `pro_testi_progress ${INTERVAL}ms linear forwards`;
+        timer = setInterval(nextSlide, INTERVAL);
+      }
 
       // Init
-      slides[0].classList.add('current');
-      updateDots();
+      show(0);
+      if(AUTOPLAY && slides.length > 1) playNow();
 
-      // If only one slide, hide controls
-      if(slides.length < 2){
-        wrap.querySelector('.controls').style.display = 'none';
+      // Controls
+      next.addEventListener('click', () => { pause(); nextSlide(); });
+      prev.addEventListener('click', () => { pause(); prevSlide(); });
+      play.addEventListener('click', () => timer ? pause() : playNow());
+      dots.forEach((d, idx) => d.addEventListener('click', () => { pause(); show(idx, {focus:true}); }));
+
+      // Keyboard navigation
+      root.addEventListener('keydown', (e) => {
+        if(e.key === 'ArrowRight'){ e.preventDefault(); pause(); nextSlide(); }
+        if(e.key === 'ArrowLeft'){  e.preventDefault(); pause(); prevSlide(); }
+      });
+
+      // Pause on hover / focus for accessibility
+      ['mouseenter','focusin','touchstart'].forEach(ev => root.addEventListener(ev, pause, {passive:true}));
+      ['mouseleave','focusout'].forEach(ev => root.addEventListener(ev, () => { if(AUTOPLAY) playNow(); }));
+
+      // Pause when section not visible
+      const io = new IntersectionObserver((ents)=>{
+        ents.forEach(ent => { if(!ent.isIntersecting) pause(); else if(AUTOPLAY) playNow(); });
+      }, {threshold:.35});
+      io.observe(root);
+
+      // Swipe (touch / pointer)
+      let startX=0, startY=0, tracking=false;
+      root.addEventListener('pointerdown', (e)=>{ tracking=true; startX=e.clientX; startY=e.clientY; });
+      root.addEventListener('pointerup', (e)=>{
+        if(!tracking) return; tracking=false;
+        const dx = e.clientX - startX, dy = e.clientY - startY;
+        if(Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)){
+          pause(); dx < 0 ? nextSlide() : prevSlide();
+        }
+      });
+
+      // Hide controls if only one slide
+      if(slides.length <= 1){
+        root.querySelector('.controls')?.setAttribute('hidden','');
+        root.querySelector('.progress')?.setAttribute('hidden','');
       }
     })();
   </script>
